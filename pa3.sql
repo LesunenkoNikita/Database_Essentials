@@ -238,7 +238,7 @@ JOIN customers_mtm cm ON l.id = cm.loan_id
 JOIN customers c ON c.id = cm.customer_id
 WHERE cm.customer_id = 1*/
 
-SELECT * 
+SELECT b.id, b.title 
 FROM books b
 WHERE b.genre_id = (
                     SELECT id
@@ -246,14 +246,14 @@ WHERE b.genre_id = (
                     WHERE name = 'Fiction');
 -- Обрали книги жанром яких є фантастика, SELECT = with non-correlated subqueries result
 
-SELECT *
+SELECT b.id, b.title
 FROM books b
 WHERE b.genre_id IN (
                      SELECT id
                      FROM genres
                      WHERE name IN ('Fiction', 'Mystery', 'Science Fiction'));
 -- Обрали книги жанром яких є один з жанрів : фантастика, наукова фантастика, містика, SELECT IN with non-correlated subqueries result
-SELECT *
+SELECT b.id, b.title
 FROM books b
 WHERE b.genre_id NOT IN (
                      SELECT id
@@ -261,7 +261,7 @@ WHERE b.genre_id NOT IN (
                      WHERE name IN ('Fiction', 'Mystery', 'Science Fiction'));
 -- Обрали книги жанром яких не є один з жанрів : фантастика, наукова фантастика, містика, SELECT NOT IN with non-correlated subqueries result
 
-SELECT *
+SELECT b.id, b.title
 FROM books b
 WHERE EXISTS (
               SELECT id
@@ -270,7 +270,7 @@ WHERE EXISTS (
 
 -- Обрати книги, в яких жанр фантастика, EXISTS with non-correlated subqueries result
 
-SELECT *
+SELECT b.id, b.title
 FROM books b
 WHERE NOT EXISTS (
               SELECT id
@@ -363,7 +363,7 @@ WHERE NOT EXISTS (
 
 -- Видалити всі книги, окрім тих, в яких жанр фантастика, DELETE NOT EXISTS with non-correlated subqueries result
 
-SELECT * 
+SELECT b.id, b.title 
 FROM books b
 WHERE genre_id = (
                     SELECT id
@@ -371,14 +371,14 @@ WHERE genre_id = (
                     WHERE name = 'Fiction' AND genres.id = b.genre_id);
 -- Обрали книги жанром яких є фантастика, SELECT = with correlated subqueries result
 
-SELECT *
+SELECT b.id, b.title
 FROM books b
 WHERE b.genre_id IN (
                      SELECT id
                      FROM genres
                      WHERE name IN ('Fiction', 'Mystery', 'Science Fiction') AND genres.id = b.genre_id);
 -- Обрали книги жанром яких є один з жанрів : фантастика, наукова фантастика, містика, SELECT IN with correlated subqueries result
-SELECT *
+SELECT b.id, b.title
 FROM books b
 WHERE b.genre_id NOT IN (
                      SELECT id
@@ -386,7 +386,7 @@ WHERE b.genre_id NOT IN (
                      WHERE name IN ('Fiction', 'Mystery', 'Science Fiction') AND genres.id = b.genre_id);
 -- Обрали книги жанром яких не є один з жанрів : фантастика, наукова фантастика, містика, SELECT NOT IN with correlated subqueries result
 
-SELECT *
+SELECT b.id, b.title
 FROM books b
 WHERE EXISTS (
               SELECT id
@@ -395,7 +395,7 @@ WHERE EXISTS (
 
 -- Обрати книги, в яких жанр фантастика, EXISTS with correlated subqueries result
 
-SELECT *
+SELECT b.id, b.title
 FROM books b
 WHERE NOT EXISTS (
               SELECT id
