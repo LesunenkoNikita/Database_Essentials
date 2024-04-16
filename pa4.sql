@@ -231,7 +231,7 @@ SET @authors_books_amount = 0;
 CALL written_books_amount('John Smith', @authors_books_amount);
 SELECT @authors_books_amount;
 --This procedure with transaction takes in customers name and checks if they can borrow more books. they can borrow more books if they have no more than three unreturned books
-CREATE PROCEDURE borrowing_ability(IN customer_name VARCHAR(100))
+CREATE PROCEDURE borrowing_ability_sproc(IN customer_name VARCHAR(100))
 BEGIN
 DECLARE borrowed_amount INT;
 START TRANSACTION;
