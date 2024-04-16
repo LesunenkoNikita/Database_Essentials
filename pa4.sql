@@ -210,7 +210,7 @@ BEGIN
 END;
 CALL choose_publishers_books('Random House');
 --This procedure returns amount of unreturned books in the library with OUT parameter
-CREATE PROCEDURE unreturned_books(OUT unreturned_amount INT)
+CREATE PROCEDURE unreturned_books_sproc(OUT unreturned_amount INT)
 BEGIN 
     SELECT COUNT(1) INTO unreturned_amount
     FROM loans l
