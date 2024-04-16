@@ -156,13 +156,11 @@ INSERT INTO loans (customer_id, book_id, loan_date, due_date, return_date) VALUE
 (12, 12, '2024-02-07', '2024-02-21', NULL);
 
 CREATE VIEW rented_books_view AS
-SELECT b.title, a.name, p.name, b.release_year, l.loan_date, TIMESTAMPDIFF(DAY, CURDATE(), l.due_date)
-FROM books b
-INNER JOIN book_authors a ON a.book_id = b.id
-INNER JOIN publishers p ON p.id = b.publisher_id
-INNER JOIN loans l ON l.book_id = b.id;
+SELECT b.title, a.name, b.release_year, l.loan_date, TIMESTAMPDIFF(DAY, CURDATE(), l.due_date)
+FROM loans l
+INNER JOIN book_authors a ON a.book_id = l.book_id
+INNER JOIN books b ON l.book_id = b.id;
 
-CREATE INDEX publishers_idx ON publishers(id);
 CREATE INDEX books_idx ON books(id);
 CREATE INDEX authors_idx ON book_authors(id);
 CREATE INDEX loans_idx ON loans(id);
