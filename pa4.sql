@@ -220,7 +220,7 @@ SET @unreturned_books_amount = 0;
 CALL unreturned_books(@unreturned_books_amount);
 SELECT @unreturned_books_amount;
 --This procedure takes in authors name and returns amount of books they wrote with IN and OUT parameters
-CREATE PROCEDURE written_books_amount(IN author_name VARCHAR(100), OUT amount_of_books INT)
+CREATE PROCEDURE written_books_amount_sproc(IN author_name VARCHAR(100), OUT amount_of_books INT)
 BEGIN 
     SELECT COUNT(1) INTO amount_of_books
     FROM books b
