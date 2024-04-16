@@ -71,22 +71,6 @@ CREATE TABLE loans (
     FOREIGN KEY (book_id) REFERENCES books(id)
 );
 
-CREATE TABLE customers_mtm (
-    customer_id INT,
-    loan_id INT,
-    PRIMARY KEY (customer_id, loan_id),
-    FOREIGN KEY (customer_id) REFERENCES customers(id),
-    FOREIGN KEY (loan_id) REFERENCES loans(id)
-);
-
-CREATE TABLE loans_mtm (
-    book_id INT,
-    loan_id INT,
-    PRIMARY KEY (book_id, loan_id),
-    FOREIGN KEY (book_id) REFERENCES books(id),
-    FOREIGN KEY (loan_id) REFERENCES loans(id)
-);
-
 INSERT INTO publishers (name, address, phone, website) VALUES
 ('Random House', '123 Main St, Cityville', '123-456-7890', 'www.randomhouse.com'),
 ('HarperCollins', '456 Elm St, Townsville', '987-654-3210', 'www.harpercollins.com'),
@@ -170,37 +154,6 @@ INSERT INTO loans (customer_id, book_id, loan_date, due_date, return_date) VALUE
 (10, 10, '2024-02-05', '2024-02-19', NULL),
 (1, 11, '2024-02-06', '2024-02-20', NULL),
 (12, 12, '2024-02-07', '2024-02-21', NULL);
-
-INSERT INTO genres_mtm (book_id, genre_id) 
-VALUES 
-(1, 1), (1, 2),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5),
-(6, 1),
-(7, 1),
-(8, 1),
-(9, 2),
-(10, 5),
-(11, 1),
-(12, 2);
-
-INSERT INTO customers_mtm (customer_id, loan_id) 
-VALUES 
-(1, 1),
-(2, 2),
-(1, 3),
-(4, 4),
-(5, 5),
-(1, 6),
-(7, 7),
-(8, 8),
-(9, 9),
-(10, 10),
-(1, 11),
-(12, 12);
-
 
 CREATE VIEW rented_books_view AS
 SELECT b.title, a.name, p.name, b.release_year, l.loan_date, TIMESTAMPDIFF(DAY, CURDATE(), l.due_date)
