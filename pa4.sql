@@ -224,7 +224,7 @@ CREATE PROCEDURE written_books_amount_sproc(IN author_name VARCHAR(100), OUT amo
 BEGIN 
     SELECT COUNT(1) INTO amount_of_books
     FROM books b
-    JOIN book_authors a ON b.author_id = a.id
+    INNER JOIN book_authors a ON b.author_id = a.id
     WHERE a.name = author_name;
 END;
 SET @authors_books_amount = 0;
