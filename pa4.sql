@@ -205,7 +205,7 @@ CREATE PROCEDURE choose_publishers_books_sproc(IN publisher_name VARCHAR(100))
 BEGIN 
     SELECT b.title 
     FROM books b
-    JOIN publishers p ON b.publisher_id = p.id
+    INNER JOIN publishers p ON b.publisher_id = p.id
     WHERE p.name = publisher_name;
 END;
 CALL choose_publishers_books('Random House');
