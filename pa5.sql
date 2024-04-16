@@ -207,7 +207,7 @@ SELECT b.title, a.name, p.name, b.release_year, l.loan_date, TIMESTAMPDIFF(DAY, 
 FROM books b
 INNER JOIN book_authors a ON a.book_id = b.id
 INNER JOIN publishers p ON p.id = b.publisher_id
-JOIN loans l ON l.book_id=b.id;
+INNER JOIN loans l ON l.book_id = b.id;
 
 CREATE INDEX publishers_idx ON publishers(id);
 CREATE INDEX books_idx ON books(id);
