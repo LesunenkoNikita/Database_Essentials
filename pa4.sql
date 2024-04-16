@@ -238,7 +238,7 @@ START TRANSACTION;
 SET borrowed_amount = (SELECT COUNT(1) 
                        FROM loans l 
                        INNER JOIN customers c ON l.customer_id = c.id 
-                       WHERE c.name=customer_name);
+                       WHERE c.name = customer_name);
 IF borrowed_amount > 3 THEN 
     ROLLBACK;
     SELECT 'you cannot borrow any more books' AS message;
