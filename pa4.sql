@@ -58,6 +58,7 @@ CREATE TABLE customers (
     phone VARCHAR(20) NOT NULL,
     email VARCHAR(100),
     password_code VARCHAR(100)
+    can_borrow BOOLEAN
 );
 
 CREATE TABLE loans (
@@ -69,22 +70,6 @@ CREATE TABLE loans (
     return_date DATE,
     FOREIGN KEY (customer_id) REFERENCES customers(id),
     FOREIGN KEY (book_id) REFERENCES books(id)
-);
-
-CREATE TABLE customers_mtm (
-    customer_id INT,
-    loan_id INT,
-    PRIMARY KEY (customer_id, loan_id),
-    FOREIGN KEY (customer_id) REFERENCES customers(id),
-    FOREIGN KEY (loan_id) REFERENCES loans(id)
-);
-
-CREATE TABLE loans_mtm (
-    book_id INT,
-    loan_id INT,
-    PRIMARY KEY (book_id, loan_id),
-    FOREIGN KEY (book_id) REFERENCES books(id),
-    FOREIGN KEY (loan_id) REFERENCES loans(id)
 );
 
 INSERT INTO publishers (name, address, phone, website) VALUES
@@ -143,19 +128,19 @@ INSERT INTO books (title, isbn, edition, release_year, price, publisher_id, genr
 ('Beloved', '9781400033416', 1, 2005, 14.99, 6, 1), 
 ('One Hundred Years of Solitude', '9780060883287', 1, 2006, 13.99, 7, 2);
 
-INSERT INTO customers (name, address, phone, email, password_code) VALUES
-('Alice Johnson', '123 Maple St, Smalltown', '555-123-4567', 'alice.johnson@gmail.com', 'SecurePass123!'),
-('Bob Smith', '456 Oak St, Villagetown', '555-987-6543', 'bob.smith@yahoo.com', 'StrongPass456$'),
-('Charlie Brown', '789 Pine St, Hamletville', '555-111-2222', 'charlie.brown@hotmail.com', 'SafePassword789!'),
-('David Davis', '654 Elm St, Countryside', '555-333-4444', 'david.davis@example.com', 'ProtectedPassABC$'),
-('Emma Wilson', '987 Cedar St, Cityville', '555-555-5555', 'emma.wilson@outlook.com', 'SecretPassDEF!'),
-('Emma Johnson', '789 Elm Road, Village, Country', '+1122334455', 'emma@example.com', 'new_hashed_password_1'),
-('Oliver Brown', '101 Pine Lane, City, Country', '+1122334455', 'oliver@example.com', 'new_hashed_password_2'),
-('Ava Wilson', '202 Maple Street, Town, Country', '+9988776655', 'ava@example.com', 'new_hashed_password_3'),
-('Liam Anderson', '303 Cedar Avenue, Village, Country', '+5544332211', 'liam@example.com', 'new_hashed_password_4'),
-('Charlotte Taylor', '404 Birch Road, City, Country', '+7711223344', 'charlotte@example.com', 'new_hashed_password_5'),
-('Noah Smith', '123 Main Street, City, Country', '+1234567890', 'noah@example.com', 'new_hashed_password_6'),
-('Isabella Doe', '456 Oak Avenue, Town, Country', '+1987654321', 'isabella@example.com', 'new_hashed_password_7');
+INSERT INTO customers (name, address, phone, email, password_code, can_borrow) VALUES
+('Alice Johnson', '123 Maple St, Smalltown', '555-123-4567', 'alice.johnson@gmail.com', 'SecurePass123!', TRUE),
+('Bob Smith', '456 Oak St, Villagetown', '555-987-6543', 'bob.smith@yahoo.com', 'StrongPass456$', TRUE),
+('Charlie Brown', '789 Pine St, Hamletville', '555-111-2222', 'charlie.brown@hotmail.com', 'SafePassword789!', TRUE),
+('David Davis', '654 Elm St, Countryside', '555-333-4444', 'david.davis@example.com', 'ProtectedPassABC$', TRUE),
+('Emma Wilson', '987 Cedar St, Cityville', '555-555-5555', 'emma.wilson@outlook.com', 'SecretPassDEF!', TRUE),
+('Emma Johnson', '789 Elm Road, Village, Country', '+1122334455', 'emma@example.com', 'new_hashed_password_1', TRUE),
+('Oliver Brown', '101 Pine Lane, City, Country', '+1122334455', 'oliver@example.com', 'new_hashed_password_2', TRUE),
+('Ava Wilson', '202 Maple Street, Town, Country', '+9988776655', 'ava@example.com', 'new_hashed_password_3', TRUE),
+('Liam Anderson', '303 Cedar Avenue, Village, Country', '+5544332211', 'liam@example.com', 'new_hashed_password_4', TRUE),
+('Charlotte Taylor', '404 Birch Road, City, Country', '+7711223344', 'charlotte@example.com', 'new_hashed_password_5', TRUE),
+('Noah Smith', '123 Main Street, City, Country', '+1234567890', 'noah@example.com', 'new_hashed_password_6', TRUE),
+('Isabella Doe', '456 Oak Avenue, Town, Country', '+1987654321', 'isabella@example.com', 'new_hashed_password_7', TRUE);
 
 INSERT INTO loans (customer_id, book_id, loan_date, due_date, return_date) VALUES
 (1, 1, '2024-01-01', '2024-01-15', '2024-01-14'),
@@ -171,35 +156,7 @@ INSERT INTO loans (customer_id, book_id, loan_date, due_date, return_date) VALUE
 (1, 11, '2024-02-06', '2024-02-20', NULL),
 (12, 12, '2024-02-07', '2024-02-21', NULL);
 
-INSERT INTO genres_mtm (book_id, genre_id) 
-VALUES 
-(1, 1), (1, 2),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5),
-(6, 1),
-(7, 1),
-(8, 1),
-(9, 2),
-(10, 5),
-(11, 1),
-(12, 2);
 
-INSERT INTO customers_mtm (customer_id, loan_id) 
-VALUES 
-(1, 1),
-(2, 2),
-(1, 3),
-(4, 4),
-(5, 5),
-(1, 6),
-(7, 7),
-(8, 8),
-(9, 9),
-(10, 10),
-(1, 11),
-(12, 12);
 --This procedure chooses all books of a publisher with IN parameter
 CREATE PROCEDURE choose_publishers_books_sproc(IN publisher_name VARCHAR(100))
 BEGIN 
@@ -219,8 +176,8 @@ END;
 SET @unreturned_books_amount = 0;
 CALL unreturned_books(@unreturned_books_amount);
 SELECT @unreturned_books_amount;
---This procedure takes in authors name and returns amount of books they wrote with IN and OUT parameters
-CREATE PROCEDURE written_books_amount_sproc(IN author_name VARCHAR(100), OUT amount_of_books INT)
+--This procedure takes in authors name and returns amount of books they wrote with INOUT parameter
+CREATE PROCEDURE written_books_amount_sproc(IN author_name VARCHAR(100), INOUT amount_of_books INT)
 BEGIN 
     SELECT COUNT(1) INTO amount_of_books
     FROM books b
@@ -241,6 +198,9 @@ SET borrowed_amount = (SELECT COUNT(1)
                        WHERE c.name = customer_name);
 IF borrowed_amount > 3 THEN 
     ROLLBACK;
+    UPDATE customers
+    SET can_borrow = FALSE
+    WHERE customers.name = customer_name;
     SELECT 'you cannot borrow any more books' AS message;
 ELSE
     COMMIT;
