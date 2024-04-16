@@ -201,7 +201,7 @@ VALUES
 (1, 11),
 (12, 12);
 --This procedure chooses all books of a publisher with IN parameter
-CREATE PROCEDURE choose_publishers_books(IN publisher_name VARCHAR(100))
+CREATE PROCEDURE choose_publishers_books_sproc(IN publisher_name VARCHAR(100))
 BEGIN 
     SELECT b.title 
     FROM books b
