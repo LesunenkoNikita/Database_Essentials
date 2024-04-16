@@ -237,7 +237,7 @@ DECLARE borrowed_amount INT;
 START TRANSACTION;
 SET borrowed_amount = (SELECT COUNT(1) 
                        FROM loans l 
-                       JOIN customers c ON l.customer_id=c.id 
+                       INNER JOIN customers c ON l.customer_id = c.id 
                        WHERE c.name=customer_name);
 IF borrowed_amount > 3 THEN 
     ROLLBACK;
