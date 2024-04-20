@@ -1,5 +1,5 @@
 # DATABASE ESSENTIALS FINAL PROJECT
-This repositore was created to demonstrate all the assignments done for the Database Essentials course.
+This repositore was created to demonstrate all the assignments done for the Database Essentials class.
 ## Project structure
 This repository contains .sql every of which is for a specific assignment. There are total of five assignments which this repository presents.
 ### Assignment 1
